@@ -13,7 +13,6 @@ const Chat: React.FC = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    
     const ws = new WebSocket("ws://localhost:8000/ws");
     setSocket(ws);
 
@@ -21,15 +20,13 @@ const Chat: React.FC = () => {
       const data = JSON.parse(event.data);
 
       if (data.type === "message_history") {
-        
         setMessages(data.data);
       } else if (data.type === "new_message") {
-        
         setMessages((prev) => [...prev, data.data]);
       }
     };
 
-    return () => ws.close(); 
+    return () => ws.close();
   }, []);
 
   const sendMessage = () => {
@@ -46,23 +43,22 @@ const Chat: React.FC = () => {
       socket.send(JSON.stringify(messageToSend));
       setNewMessage("");
     } else {
-      console.error("WebSocket não está conectado.");
+      console.error("WebSocket is not connected.");
     }
   };
 
   return (
     <div className="h-screen flex flex-col bg-gray-800 text-white">
       <div className="flex-shrink-0 bg-gray-900 p-4">
-        <h1 className="text-2xl font-bold">Simple Real-Time Chat</h1>
+        <h1 className="text-2xl font-bold">Simple Discord-TXT</h1>
       </div>
 
-      
       {!username ? (
         <div className="flex-grow flex items-center justify-center">
           <div className="bg-gray-700 p-6 rounded-lg shadow-lg">
             <input
               type="text"
-              placeholder="Digite seu nome"
+              placeholder="Enter your name"
               value={usernameInput}
               onChange={(e) => setUsernameInput(e.target.value)}
               className="w-full p-2 mb-4 bg-gray-600 rounded text-white focus:outline-none"
@@ -71,12 +67,12 @@ const Chat: React.FC = () => {
               onClick={() => usernameInput.trim() && setUsername(usernameInput)}
               className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-semibold"
             >
-              Entrar no Chat
+              Join Chat
             </button>
           </div>
         </div>
       ) : (
-        <div className="flex-grow flex flex-col">          
+        <div className="flex-grow flex flex-col">
           <div className="flex-grow overflow-y-auto p-4 space-y-4">
             {messages.map((msg, index) => (
               <div key={index} className="flex items-start space-x-3">
@@ -93,7 +89,7 @@ const Chat: React.FC = () => {
             ))}
           </div>
 
-          {/* Área de input */}
+          {/* Input area */}
           <div className="flex-shrink-0 p-4 bg-gray-900">
             <div className="flex items-center space-x-4">
               <input
@@ -101,7 +97,7 @@ const Chat: React.FC = () => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 className="flex-grow p-2 bg-gray-700 rounded text-white focus:outline-none"
-                placeholder="Digite uma mensagem..."
+                placeholder="Type a message..."
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     sendMessage();
@@ -112,7 +108,7 @@ const Chat: React.FC = () => {
                 onClick={sendMessage}
                 className="py-2 px-4 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-semibold"
               >
-                Enviar
+                Send
               </button>
             </div>
           </div>
